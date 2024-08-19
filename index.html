@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxes Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Black background */
+            color: #e0e0e0; /* Light text color */
+            overflow: hidden; /* Hide overflow during loading */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+            font-size: 24px;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 0;
+            gap: 20px; /* Space between boxes */
+            width: 80%;
+            max-width: 1200px; /* Ensure the container doesn't stretch too wide */
+            height: auto;
+        }
+        .box {
+            width: 250px; /* Increased box width */
+            height: 220px; /* Increased box height */
+            padding: 15px; /* Added padding inside the box */
+            border: 2px solid #444;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            overflow: hidden;
+            background: #1e1e1e; /* Dark box background */
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .box h2 {
+            font-size: 20px; /* Slightly larger font size for titles */
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .box-content {
+            font-size: 16px; /* Larger font size for content */
+            overflow-y: auto;
+            height: calc(100% - 60px); /* Adjusted height to fit new box size */
+        }
+        .buy-button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #e0e0e0;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            width: 80%;
+            max-width: 800px;
+            height: 60%;
+            max-height: 500px;
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            overflow: auto;
+            animation: fadeIn 0.3s;
+            color: #e0e0e0;
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #333;
+            color: #e0e0e0;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .close-button:hover {
+            background: #555;
+        }
+        .discord-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #7289da;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .discord-button:hover {
+            background-color: #5b6eae;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loading-screen">
+        Loading...
+    </div>
+    <div class="container">
+        <div class="box">
+            <h2>Steam Client</h2>
+            <div class="box-content">
+                7 Days - $5<br>
+                10 Days - $10<br>
+                20 Days - $18<br>
+                LifeTime - $21.36
+            </div>
+            <button class="buy-button" onclick="openModal('steam-client-modal')">Buy</button>
+        </div>
+        <div class="box">
+            <h2>Roblox Executor</h2>
+            <div class="box-content">
+                10 Days - $5.35<br>
+                15 Days - $8.50<br>
+                25 Days - $18.25<br>
+                30 Days - $21.03<br>
+                LifeTime - $32.18
+            </div>
+            <button class="buy-button" onclick="openModal('roblox-executor-modal')">Buy</button>
+        </div>
+        <div class="box">
+            <h2>FiveM Mod Menu</h2>
+            <div class="box-content">
+                Per Month - $20<br>
+                Yearly - $40<br>
+                LifeTime - $75
+            </div>
+            <button class="buy-button" onclick="openModal('fivem-mod-menu-modal')">Buy</button>
+        </div>
+        <div class="box">
+            <h2>Fortnite Aimbot</h2>
+            <div class="box-content">
+                2 Days - $1.52<br>
+                5 Days - $4.28<br>
+                10 Days - $9.26<br>
+                25 Days - $14.27<br>
+                100 Days - $23.18<br>
+                LifeTime - $50
+            </div>
+            <button class="buy-button" onclick="openModal('fortnite-aimbot-modal')">Buy</button>
+        </div>
+        <div class="box">
+            <h2>FiveM Swoofer</h2>
+            <div class="box-content">
+                One-Time - $15<br>
+                Unlimited-Use - $30
+            </div>
+            <button class="buy-button" onclick="openModal('fivem-swoofer-modal')">Buy</button>
+        </div>
+    </div>
+
+    <!-- Modal Structures -->
+    <div id="steam-client-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('steam-client-modal')">X</button>
+            <p>7 Days - $5<br>
+               10 Days - $10<br>
+               20 Days - $18<br>
+               LifeTime - $21.36<br><br>
+               Join the Discord to buy
+            </p>
+            <a href="https://discord.gg/jAwXDEtERq" target="_blank" class="discord-button">Join Discord</a>
+        </div>
+    </div>
+
+    <div id="roblox-executor-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('roblox-executor-modal')">X</button>
+            <p>10 Days - $5.35<br>
+               15 Days - $8.50<br>
+               25 Days - $18.25<br>
+               30 Days - $21.03<br>
+               LifeTime - $32.18<br><br>
+               Join the Discord to buy
+            </p>
+            <a href="https://discord.gg/jAwXDEtERq" target="_blank" class="discord-button">Join Discord</a>
+        </div>
+    </div>
+
+    <div id="fivem-mod-menu-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('fivem-mod-menu-modal')">X</button>
+            <p>Per Month - $20<br>
+               Yearly - $40<br>
+               LifeTime - $75<br><br>
+               Join the Discord to buy
+            </p>
+            <a href="https://discord.gg/jAwXDEtERq" target="_blank" class="discord-button">Join Discord</a>
+        </div>
+    </div>
+
+    <div id="fortnite-aimbot-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('fortnite-aimbot-modal')">X</button>
+            <p>2 Days - $1.52<br>
+               5 Days - $4.28<br>
+               10 Days - $9.26<br>
+               25 Days - $14.27<br>
+               100 Days - $23.18<br>
+               LifeTime - $50<br><br>
+               Join the Discord to buy
+            </p>
+            <a href="https://discord.gg/jAwXDEtERq" target="_blank" class="discord-button">Join Discord</a>
+        </div>
+    </div>
+
+    <div id="fivem-swoofer-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal('fivem-swoofer-modal')">X</button>
+            <p>One-Time - $15<br>
+               Unlimited-Use - $30<br><br>
+               Join the Discord to buy
+            </p>
+            <a href="https://discord.gg/jAwXDEtERq" target="_blank" class="discord-button">Join Discord</a>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Re-enable overflow after loading
+            }, 1000); // Adjust the timeout as needed for loading duration
+        });
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+    </script>
+</body>
+</html>
